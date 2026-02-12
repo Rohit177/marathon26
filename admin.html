@@ -48,20 +48,33 @@
   <body
     class="bg-slate-50 text-slate-800 antialiased selection:bg-orange-500 selection:text-white min-h-screen flex flex-col"
   >
+  
     <div
       id="loginView"
       class="login-bg min-h-screen flex items-center justify-center p-4 transition-opacity duration-500"
     >
+    
       <div
         class="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-4xl w-full flex flex-col md:flex-row"
       >
-        <div
+      
+      <div
           class="bg-blue-600 p-10 md:w-5/12 text-white flex flex-col justify-center relative overflow-hidden"
         >
+
+          <!-- Back to Event Button -->
+          <a
+            href="/index.html"
+            class="absolute top-6 left-6 inline-flex items-center gap-2 text-white bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full text-sm font-semibold backdrop-blur transition-all"
+          >
+            <i class="fas fa-arrow-left"></i> Back to Event
+          </a>
+
           <div
             class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-orange-500 rounded-full opacity-20 blur-2xl"
           ></div>
-          <div class="relative z-10">
+
+          <div class="relative z-10 mt-10">
             <div
               class="w-16 h-16 bg-white text-blue-600 rounded-2xl flex items-center justify-center text-3xl font-black mb-6 shadow-lg"
             >
@@ -82,6 +95,7 @@
             </div>
           </div>
         </div>
+
 
         <div class="p-10 md:w-7/12 bg-white flex flex-col justify-center">
           <h3 class="text-2xl font-bold text-slate-900 mb-6">Sign In</h3>
@@ -154,18 +168,29 @@
                 >Marathon<span class="text-orange-500">Admin</span></span
               >
             </div>
-            <div class="flex items-center gap-4">
-              <span class="hidden sm:block text-sm text-blue-200 font-medium"
-                ><i class="fas fa-circle text-orange-400 text-[10px] mr-1"></i>
-                Local Data</span
-              >
-              <button
-                id="logoutBtn"
-                class="bg-blue-800 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors flex items-center gap-2 border border-blue-700"
-              >
-                <i class="fas fa-sign-out-alt"></i> Logout
-              </button>
-            </div>
+           <div class="flex items-center gap-4">
+            
+            <a
+              href="/index.html"
+              class="inline-flex items-center gap-2 text-white bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-sm font-semibold backdrop-blur transition-all border border-white/20"
+            >
+              <i class="fas fa-arrow-left"></i> Back to Event
+            </a>
+
+            <span class="hidden sm:block text-sm text-blue-200 font-medium">
+              <i class="fas fa-circle text-orange-400 text-[10px] mr-1"></i>
+              Local Data
+            </span>
+
+            <button
+              id="logoutBtn"
+              class="bg-blue-800 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors flex items-center gap-2 border border-blue-700"
+            >
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+
+          </div>
+
           </div>
         </div>
       </nav>
