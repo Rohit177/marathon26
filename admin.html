@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | 5KM Mini Marathon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap");
+      body {
+        font-family: "Outfit", sans-serif;
+      }
+
+      .login-bg {
+        background:
+          linear-gradient(rgba(15, 23, 42, 0.85), rgba(30, 58, 138, 0.9)),
+          url("https://images.unsplash.com/photo-1552674605-171d51b8da6e?auto=format&fit=crop&q=80")
+            center/cover;
+      }
+
+      /* Custom scrollbar for the table */
+      .table-scroll::-webkit-scrollbar {
+        height: 8px;
+        width: 8px;
+      }
+      .table-scroll::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        rounded: 4px;
+      }
+      .table-scroll::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+      .table-scroll::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+
+      /* Utility class to hide elements */
+      .hidden-view {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-slate-50 text-slate-800 antialiased selection:bg-orange-500 selection:text-white min-h-screen flex flex-col"
+  >
+    <div
+      id="loginView"
+      class="login-bg min-h-screen flex items-center justify-center p-4 transition-opacity duration-500"
+    >
+      <div
+        class="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-4xl w-full flex flex-col md:flex-row"
+      >
+        <div
+          class="bg-blue-600 p-10 md:w-5/12 text-white flex flex-col justify-center relative overflow-hidden"
+        >
+          <div
+            class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-orange-500 rounded-full opacity-20 blur-2xl"
+          ></div>
+          <div class="relative z-10">
+            <div
+              class="w-16 h-16 bg-white text-blue-600 rounded-2xl flex items-center justify-center text-3xl font-black mb-6 shadow-lg"
+            >
+              SP
+            </div>
+            <h2 class="text-3xl font-black tracking-tight mb-2">
+              Admin Portal
+            </h2>
+            <p class="text-blue-100 font-light mb-8">
+              Authorized personnel only. Manage registrations for the 5KM Mini
+              Marathon.
+            </p>
+            <div
+              class="flex items-center gap-3 text-sm font-medium text-blue-200"
+            >
+              <i class="fas fa-unlock-alt text-orange-400"></i> Local
+              Development Mode
+            </div>
+          </div>
+        </div>
+
+        <div class="p-10 md:w-7/12 bg-white flex flex-col justify-center">
+          <h3 class="text-2xl font-bold text-slate-900 mb-6">Sign In</h3>
+
+          <div
+            class="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-xl text-orange-800 text-sm font-medium"
+          >
+            <i class="fas fa-info-circle mr-2"></i> Authentication is currently
+            bypassed. Click "Access Dashboard" to enter directly.
+          </div>
+
+          <form id="loginForm" class="space-y-5">
+            <div>
+              <label
+                class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                >Admin Email</label
+              >
+              <div class="relative">
+                <input
+                  type="email"
+                  id="adminEmail"
+                  value="admin@syp.ac.in"
+                  class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all"
+                />
+                <i
+                  class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                ></i>
+              </div>
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                >Password</label
+              >
+              <div class="relative">
+                <input
+                  type="password"
+                  id="adminPassword"
+                  value="password"
+                  class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all"
+                />
+                <i
+                  class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                ></i>
+              </div>
+            </div>
+            <button
+              type="submit"
+              id="loginBtn"
+              class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-orange-500/30 flex justify-center items-center gap-2 mt-4"
+            >
+              <span>Access Dashboard</span>
+              <i class="fas fa-arrow-right text-sm"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="dashboardView"
+      class="hidden-view flex-1 flex flex-col bg-slate-50"
+    >
+      <nav class="bg-blue-900 text-white shadow-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between h-16 items-center">
+            <div class="flex items-center gap-3">
+              <i class="fas fa-running text-orange-500 text-2xl"></i>
+              <span class="font-bold text-xl tracking-wide"
+                >Marathon<span class="text-orange-500">Admin</span></span
+              >
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="hidden sm:block text-sm text-blue-200 font-medium"
+                ><i class="fas fa-circle text-orange-400 text-[10px] mr-1"></i>
+                Local Data</span
+              >
+              <button
+                id="logoutBtn"
+                class="bg-blue-800 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors flex items-center gap-2 border border-blue-700"
+              >
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1 flex flex-col"
+      >
+        <div class="mb-8">
+          <h1 class="text-3xl font-black text-slate-900 mb-6">Overview</h1>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div
+              class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-blue-500"
+            >
+              <div
+                class="text-slate-500 text-sm font-bold uppercase tracking-wider mb-1"
+              >
+                Total Runners
+              </div>
+              <div class="text-4xl font-black text-slate-900" id="statTotal">
+                0
+              </div>
+            </div>
+            <div
+              class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-orange-500"
+            >
+              <div
+                class="text-slate-500 text-sm font-bold uppercase tracking-wider mb-1"
+              >
+                Revenue (Est.)
+              </div>
+              <div class="text-4xl font-black text-slate-900" id="statRevenue">
+                ₹0
+              </div>
+            </div>
+            <div
+              class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-emerald-500"
+            >
+              <div
+                class="text-slate-500 text-sm font-bold uppercase tracking-wider mb-1"
+              >
+                Male
+              </div>
+              <div class="text-4xl font-black text-slate-900" id="statMale">
+                0
+              </div>
+            </div>
+            <div
+              class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-purple-500"
+            >
+              <div
+                class="text-slate-500 text-sm font-bold uppercase tracking-wider mb-1"
+              >
+                Female
+              </div>
+              <div class="text-4xl font-black text-slate-900" id="statFemale">
+                0
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col md:flex-row gap-4 justify-between items-center"
+        >
+          <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+            <div class="relative w-full sm:w-64">
+              <i
+                class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              ></i>
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Search name or phone..."
+                class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-sm"
+              />
+            </div>
+
+            <select
+              id="filterCategory"
+              class="w-full sm:w-48 px-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-sm bg-white"
+            >
+              <option value="All">All Categories</option>
+              <option value="16-50">16–50 Years</option>
+              <option value="Above 50">Above 50 Years</option>
+            </select>
+
+            <select
+              id="filterGender"
+              class="w-full sm:w-40 px-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-sm bg-white"
+            >
+              <option value="All">All Genders</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+
+          <button
+            id="exportBtn"
+            class="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-xl font-bold transition-colors flex items-center justify-center gap-2 shadow-sm"
+          >
+            <i class="fas fa-file-csv"></i> Export CSV
+          </button>
+        </div>
+
+        <div
+          class="bg-white rounded-2xl shadow-sm border border-slate-200 flex-1 overflow-hidden flex flex-col"
+        >
+          <div class="table-scroll overflow-x-auto flex-1">
+            <table class="w-full text-left border-collapse whitespace-nowrap">
+              <thead>
+                <tr
+                  class="bg-slate-50 border-b border-slate-200 text-xs uppercase tracking-wider text-slate-500 font-bold"
+                >
+                  <th class="px-6 py-4">Participant Name</th>
+                  <th class="px-6 py-4">WhatsApp</th>
+                  <th class="px-6 py-4">Gender</th>
+                  <th class="px-6 py-4">Category</th>
+                  <th class="px-6 py-4">Profile</th>
+                  <th class="px-6 py-4">T-shirt</th>
+                  <th class="px-6 py-4 text-center">Date Registered</th>
+                </tr>
+              </thead>
+              <tbody
+                id="tableBody"
+                class="divide-y divide-slate-100 text-sm text-slate-700"
+              ></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // --- 1. Dummy Data for Local Testing ---
+      let allRegistrations = [
+        {
+          id: "1",
+          fullName: "Aarav Patil",
+          phone: "9876543210",
+          gender: "Male",
+          ageCategory: "16-50",
+          profile: "Student",
+          dob: "2004-05-12",
+          address: "SYP Campus",
+          tshirtSize: "38 S",
+          skillLevel: "Beginner",
+          emergencyName: "Rahul Patil",
+          emergencyPhone: "9876543211",
+          timestamp: "2026-02-11T09:30:00Z",
+        },
+        {
+          id: "2",
+          fullName: "Priya Sharma",
+          phone: "8765432109",
+          gender: "Female",
+          ageCategory: "16-50",
+          profile: "Civilian",
+          dob: "1995-08-22",
+          address: "MG Road, Aurangabad",
+          tshirtSize: "40 M",
+          skillLevel: "Intermediate",
+          emergencyName: "Amit Sharma",
+          emergencyPhone: "8765432100",
+          timestamp: "2026-02-10T14:15:00Z",
+        },
+        {
+          id: "3",
+          fullName: "Rajesh Deshmukh",
+          phone: "7654321098",
+          gender: "Male",
+          ageCategory: "Above 50",
+          profile: "Civilian",
+          dob: "1968-11-05",
+          address: "CIDCO, Aurangabad",
+          tshirtSize: "42 L",
+          skillLevel: "Advanced",
+          emergencyName: "Sunita Deshmukh",
+          emergencyPhone: "7654321099",
+          timestamp: "2026-02-09T18:45:00Z",
+        },
+        {
+          id: "4",
+          fullName: "Neha Kulkarni",
+          phone: "9988776655",
+          gender: "Female",
+          ageCategory: "16-50",
+          profile: "Student",
+          dob: "2005-02-14",
+          address: "Girls Hostel",
+          tshirtSize: "36 XS",
+          skillLevel: "Beginner",
+          emergencyName: "Sanjay Kulkarni",
+          emergencyPhone: "9988776650",
+          timestamp: "2026-02-11T11:20:00Z",
+        },
+      ];
+
+      // --- 2. UI Elements ---
+      const loginView = document.getElementById("loginView");
+      const dashboardView = document.getElementById("dashboardView");
+      const loginForm = document.getElementById("loginForm");
+      const loginBtn = document.getElementById("loginBtn");
+      const logoutBtn = document.getElementById("logoutBtn");
+      const tableBody = document.getElementById("tableBody");
+
+      const searchInput = document.getElementById("searchInput");
+      const filterCategory = document.getElementById("filterCategory");
+      const filterGender = document.getElementById("filterGender");
+      const exportBtn = document.getElementById("exportBtn");
+
+      // --- 3. Login & Logout Logic ---
+      loginForm.addEventListener("submit", (e) => {
+        e.preventDefault(); // Prevent page reload
+
+        // Show fake loading state
+        loginBtn.innerHTML =
+          '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
+        loginBtn.disabled = true;
+
+        // Wait 800ms, then swap views and load data
+        setTimeout(() => {
+          loginView.classList.add("hidden-view");
+          dashboardView.classList.remove("hidden-view");
+          loginBtn.innerHTML =
+            '<span>Access Dashboard</span> <i class="fas fa-arrow-right text-sm"></i>';
+          loginBtn.disabled = false;
+
+          updateDashboard(); // Render the data
+        }, 800);
+      });
+
+      logoutBtn.addEventListener("click", () => {
+        dashboardView.classList.add("hidden-view");
+        loginView.classList.remove("hidden-view");
+        // Clear inputs just in case
+        document.getElementById("adminEmail").value = "admin@syp.ac.in";
+        document.getElementById("adminPassword").value = "password";
+      });
+
+      // --- 4. Dashboard Logic (Filtering & Rendering) ---
+      function updateDashboard() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const catFilter = filterCategory.value;
+        const genFilter = filterGender.value;
+
+        // Filter array based on inputs
+        const filteredData = allRegistrations.filter((runner) => {
+          const matchesSearch =
+            (runner.fullName || "").toLowerCase().includes(searchTerm) ||
+            (runner.phone || "").includes(searchTerm);
+          const matchesCat =
+            catFilter === "All" || runner.ageCategory === catFilter;
+          const matchesGen = genFilter === "All" || runner.gender === genFilter;
+          return matchesSearch && matchesCat && matchesGen;
+        });
+
+        renderTable(filteredData);
+        updateStats(filteredData);
+      }
+
+      function renderTable(data) {
+        tableBody.innerHTML = ""; // Clear table
+
+        if (data.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="7" class="px-6 py-12 text-center text-slate-500 font-medium">No registrations found matching those criteria.</td></tr>`;
+          return;
+        }
+
+        data.forEach((runner) => {
+          const dateString = new Date(runner.timestamp).toLocaleDateString();
+
+          const tr = document.createElement("tr");
+          tr.className = "hover:bg-slate-50/80 transition-colors";
+          tr.innerHTML = `
+                    <td class="px-6 py-4 font-bold text-slate-900">${runner.fullName || "N/A"}</td>
+                    <td class="px-6 py-4"><a href="https://wa.me/91${runner.phone}" target="_blank" class="text-green-600 hover:underline font-medium"><i class="fab fa-whatsapp mr-1"></i> ${runner.phone || "N/A"}</a></td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 rounded-md text-xs font-bold ${runner.gender === "Male" ? "bg-blue-100 text-blue-700" : runner.gender === "Female" ? "bg-pink-100 text-pink-700" : "bg-slate-200 text-slate-700"}">
+                            ${runner.gender || "N/A"}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">${runner.ageCategory || "N/A"}</td>
+                    <td class="px-6 py-4">${runner.profile || "N/A"}</td>
+                    <td class="px-6 py-4 font-medium">${runner.tshirtSize || "N/A"}</td>
+                    <td class="px-6 py-4 text-center text-slate-500">${dateString}</td>
+                `;
+          tableBody.appendChild(tr);
+        });
+      }
+
+      function updateStats(data) {
+        // Animate numbers (simple replacement here)
+        document.getElementById("statTotal").innerText = data.length;
+        document.getElementById("statRevenue").innerText =
+          `₹${data.length * 400}`;
+
+        let maleCount = 0;
+        let femaleCount = 0;
+        data.forEach((r) => {
+          if (r.gender === "Male") maleCount++;
+          if (r.gender === "Female") femaleCount++;
+        });
+
+        document.getElementById("statMale").innerText = maleCount;
+        document.getElementById("statFemale").innerText = femaleCount;
+      }
+
+      // --- 5. Export to CSV Logic ---
+      exportBtn.addEventListener("click", () => {
+        if (allRegistrations.length === 0) return alert("No data to export.");
+
+        // Define CSV Headers
+        const headers = [
+          "Full Name",
+          "WhatsApp",
+          "Gender",
+          "Category",
+          "Profile",
+          "DOB",
+          "Address",
+          "T-shirt Size",
+          "Skill Level",
+          "Emergency Name",
+          "Emergency Phone",
+          "Date Registered",
+        ];
+
+        // Map ALL data rows to CSV format
+        const rows = allRegistrations.map((r) => {
+          const dateString = new Date(r.timestamp).toLocaleString();
+          return [
+            `"${r.fullName || ""}"`, // Quotes handle commas in names
+            `="${r.phone || ""}"`, // Excel formula prevents dropping leading zeros
+            r.gender || "",
+            r.ageCategory || "",
+            r.profile || "",
+            r.dob || "",
+            `"${(r.address || "").replace(/"/g, '""')}"`, // Handle commas in address
+            r.tshirtSize || "",
+            r.skillLevel || "",
+            `"${r.emergencyName || ""}"`,
+            `="${r.emergencyPhone || ""}"`,
+            `"${dateString}"`,
+          ].join(",");
+        });
+
+        // Create CSV content and trigger download
+        const csvContent =
+          "data:text/csv;charset=utf-8," +
+          [headers.join(","), ...rows].join("\n");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+
+        link.setAttribute("href", encodedUri);
+        link.setAttribute(
+          "download",
+          `marathon_registrations_${new Date().toISOString().split("T")[0]}.csv`,
+        );
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+
+      // --- 6. Event Listeners for Live Filtering ---
+      searchInput.addEventListener("input", updateDashboard);
+      filterCategory.addEventListener("change", updateDashboard);
+      filterGender.addEventListener("change", updateDashboard);
+    </script>
+  </body>
+</html>
